@@ -1,1 +1,217 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EXIT - Your Investment, Your Exit</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F4F6F5;--card:#fff;--ink:#17262B;--mut:#5E6F73;--line:#D9E1DF;--teal:#0E5A5A;--teal2:#DCEBEA;--amber:#E39A2D;--red:#B3412F;--green:#2E7D4F}
+*{box-sizing:border-box;margin:0}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+header{background:var(--teal);color:#fff;padding:18px 24px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.logo{font-weight:800;font-size:26px;letter-spacing:1px}
+.logo small{display:block;font-size:12px;font-weight:400;letter-spacing:0;opacity:.8}
+nav{display:flex;gap:6px;flex-wrap:wrap}
+nav button{background:transparent;border:1px solid rgba(255,255,255,.35);color:#fff;padding:8px 14px;border-radius:6px;font:inherit;cursor:pointer}
+nav button.on{background:#fff;color:var(--teal);font-weight:700}
+nav button:focus-visible,.btn:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+main{max-width:980px;margin:0 auto;padding:24px 16px 60px}
+h2{font-size:22px;margin-bottom:4px}
+.sub{color:var(--mut);margin-bottom:18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px}
+.card h3{font-size:16px;margin-bottom:6px}
+.row{display:flex;justify-content:space-between;gap:8px;font-size:14px;padding:3px 0}
+.row span:first-child{color:var(--mut)}
+.tag{display:inline-block;font-size:12px;padding:2px 8px;border-radius:20px;background:var(--teal2);color:var(--teal);margin-bottom:8px}
+.risk{font-weight:700}
+.btn{margin-top:12px;background:var(--teal);color:#fff;border:0;border-radius:6px;padding:9px 14px;font:inherit;font-weight:700;cursor:pointer}
+.btn.alt{background:var(--amber);color:#2b1c00}
+.btn.ghost{background:transparent;color:var(--teal);border:1px solid var(--teal)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:20px}
+.sum .card b{font-size:22px;display:block}
+.sum .card span{color:var(--mut);font-size:13px}
+.panel{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--amber);border-radius:10px;padding:18px;margin-top:16px}
+.empty{padding:28px;text-align:center;color:var(--mut);border:1px dashed var(--line);border-radius:10px}
+.steps{display:flex;gap:0;margin:14px 0;flex-wrap:wrap}
+.step{flex:1;min-width:110px;padding:10px 8px;text-align:center;font-size:13px;background:#E9EEED;color:var(--mut);border-right:2px solid var(--bg)}
+.step.done{background:var(--teal);color:#fff}
+.step.now{background:var(--amber);color:#2b1c00;font-weight:700}
+.note{font-size:12.5px;color:var(--mut);margin-top:24px}
+.hide{display:none}
+select,input{font:inherit;padding:8px;border:1px solid var(--line);border-radius:6px;width:100%}
+label{font-size:13px;color:var(--mut);display:block;margin:10px 0 4px}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">EXIT<small>Your Investment, Your Exit</small></div>
+  <nav aria-label="Menu utama">
+    <button data-v="dash" class="on">Portofolio</button>
+    <button data-v="market">Pasar Pengalihan</button>
+    <button data-v="track">Status Pengalihan</button>
+  </nav>
+</header>
+<main>
+  <section id="dash"></section>
+  <section id="market" class="hide"></section>
+  <section id="track" class="hide"></section>
+  <p class="note">Prototipe untuk tugas Inovasi Keuangan Digital. Seluruh data adalah data contoh dan tidak ada transaksi nyata.</p>
+</main>
 
+<script>
+const rp = n => 'Rp' + Math.round(n).toLocaleString('id-ID');
+const riskLabel = r => ({1:'Rendah',2:'Sedang',3:'Tinggi'})[r];
+const riskColor = r => ({1:'var(--green)',2:'var(--amber)',3:'var(--red)'})[r];
+
+// Data contoh posisi investasi milik investor (existing investor)
+let positions = [
+  {id:1, nama:'Pendanaan Invoice PT Sinar Jaya', jenis:'P2P Lending', nominal:10000000, imbal:12, sisa:75, risk:1, status:'aktif'},
+  {id:2, nama:'Obligasi Urunan Kedai Kopi Senja', jenis:'SCF', nominal:5000000, imbal:14, sisa:120, risk:2, status:'aktif'},
+  {id:3, nama:'Pendanaan Modal Kerja CV Tani Makmur', jenis:'P2P Lending', nominal:7500000, imbal:16, sisa:45, risk:3, status:'aktif'}
+];
+// Daftar posisi yang tersedia di pasar (dari investor lain)
+let listings = [
+  {id:101, nama:'Pendanaan Armada PT Logistik Nusa', jenis:'P2P Lending', harga:9650000, nominal:10000000, imbal:13, sisa:60, risk:1, milikSaya:false},
+  {id:102, nama:'Saham Urunan Resto Bahari', jenis:'SCF', harga:4780000, nominal:5000000, imbal:15, sisa:90, risk:2, milikSaya:false}
+];
+let tracking = []; // proses pengalihan milik saya
+
+// Valuasi sederhana: diskon bergantung pada risiko dan sisa tenor
+function valuasi(p){
+  const diskon = 0.005 + p.risk*0.004 + (p.sisa/30)*0.001;
+  return {diskon, harga:p.nominal*(1-diskon)};
+}
+
+function show(v){
+  ['dash','market','track'].forEach(id=>document.getElementById(id).classList.toggle('hide',id!==v));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+  render();
+}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>show(b.dataset.v));
+
+function rows(p){return `
+  <div class="row"><span>Nominal</span><b>${rp(p.nominal)}</b></div>
+  <div class="row"><span>Imbal hasil</span><span>${p.imbal}% / tahun</span></div>
+  <div class="row"><span>Sisa tenor</span><span>${p.sisa} hari</span></div>
+  <div class="row"><span>Skor risiko</span><span class="risk" style="color:${riskColor(p.risk)}">${riskLabel(p.risk)}</span></div>`}
+
+function renderDash(){
+  const total = positions.reduce((a,p)=>a+p.nominal,0);
+  const aktif = positions.filter(p=>p.status==='aktif');
+  let h = `<h2>Portofolio saya</h2><p class="sub">Pilih posisi yang ingin dialihkan sebelum jatuh tempo.</p>
+  <div class="sum">
+    <div class="card"><b>${rp(total)}</b><span>Total posisi investasi</span></div>
+    <div class="card"><b>${aktif.length}</b><span>Posisi aktif</span></div>
+    <div class="card"><b>${tracking.length}</b><span>Pengalihan berjalan</span></div>
+  </div><div class="grid">`;
+  positions.forEach(p=>{
+    h += `<div class="card"><span class="tag">${p.jenis}</span><h3>${p.nama}</h3>${rows(p)}
+    ${p.status==='aktif'
+      ? `<button class="btn" onclick="openValuasi(${p.id})">Alihkan posisi</button>`
+      : `<button class="btn ghost" disabled>Sedang dialihkan</button>`}</div>`;
+  });
+  h += `</div><div id="valuasiBox"></div>`;
+  dash.innerHTML = h;
+}
+
+function openValuasi(id){
+  const p = positions.find(x=>x.id===id), v = valuasi(p);
+  document.getElementById('valuasiBox').innerHTML = `
+  <div class="panel"><h3>Hasil valuasi: ${p.nama}</h3>
+    <p class="sub">Verifikasi posisi selesai. Berikut estimasi harga pengalihan.</p>
+    <div class="row"><span>Nominal posisi</span><b>${rp(p.nominal)}</b></div>
+    <div class="row"><span>Diskon pengalihan</span><span>${(v.diskon*100).toFixed(2)}%</span></div>
+    <div class="row"><span>Estimasi harga pengalihan</span><b>${rp(v.harga)}</b></div>
+    <label for="harga">Harga yang Anda tawarkan</label>
+    <input id="harga" type="number" value="${Math.round(v.harga)}" min="1">
+    <button class="btn alt" onclick="listkan(${p.id})">Tawarkan ke investor lain</button>
+    <button class="btn ghost" onclick="document.getElementById('valuasiBox').innerHTML=''">Batal</button>
+  </div>`;
+  document.getElementById('valuasiBox').scrollIntoView({behavior:'smooth'});
+}
+
+function listkan(id){
+  const p = positions.find(x=>x.id===id);
+  const harga = Number(document.getElementById('harga').value)||valuasi(p).harga;
+  p.status='dialihkan';
+  listings.unshift({id:200+id, nama:p.nama, jenis:p.jenis, harga, nominal:p.nominal, imbal:p.imbal, sisa:p.sisa, risk:p.risk, milikSaya:true, posId:id});
+  tracking.push({posId:id, nama:p.nama, harga, tahap:2}); // 0 verifikasi,1 valuasi,2 matching,3 settlement,4 selesai
+  show('market');
+}
+
+function renderMarket(){
+  let h = `<h2>Pasar pengalihan</h2><p class="sub">Posisi investasi yang ditawarkan investor lain. Sistem mencocokkan sesuai profil risiko Anda.</p>
+  <label for="prof">Profil risiko saya</label>
+  <select id="prof" onchange="renderMarket()" style="max-width:260px">
+    <option value="3">Berani (semua risiko)</option>
+    <option value="2">Moderat (hingga sedang)</option>
+    <option value="1">Konservatif (rendah saja)</option>
+  </select><div class="grid" style="margin-top:14px">`;
+  const sel = document.getElementById('prof');
+  const maks = sel ? Number(sel.value) : 3;
+  const cocok = listings.filter(l=>!l.milikSaya && l.risk<=maks);
+  const milik = listings.filter(l=>l.milikSaya);
+  [...cocok,...milik].forEach(l=>{
+    const hemat = ((1-l.harga/l.nominal)*100).toFixed(1);
+    h += `<div class="card"><span class="tag">${l.jenis}${l.milikSaya?' - milik saya':''}</span><h3>${l.nama}</h3>${rows(l)}
+    <div class="row"><span>Harga pengalihan</span><b>${rp(l.harga)}</b></div>
+    <div class="row"><span>Diskon dari nominal</span><span>${hemat}%</span></div>
+    ${l.milikSaya
+      ? `<button class="btn ghost" disabled>Menunggu investor baru</button>
+         <button class="btn alt" onclick="simulasiBeli(${l.posId})">Simulasi: investor baru mengambil alih</button>`
+      : `<button class="btn" onclick="ambilAlih(${l.id})">Ambil alih posisi</button>`}</div>`;
+  });
+  h += '</div>';
+  if(!cocok.length) h += `<div class="empty" style="margin-top:14px">Belum ada posisi yang cocok dengan profil risiko ini. Ubah profil risiko untuk melihat lainnya.</div>`;
+  const keep = sel ? sel.value : '3';
+  market.innerHTML = h;
+  document.getElementById('prof').value = keep;
+}
+
+function ambilAlih(id){
+  const l = listings.find(x=>x.id===id);
+  listings = listings.filter(x=>x.id!==id);
+  alert('Posisi "'+l.nama+'" berhasil diambil alih seharga '+rp(l.harga)+'. (Simulasi)');
+  renderMarket();
+}
+
+function simulasiBeli(posId){
+  const t = tracking.find(x=>x.posId===posId);
+  t.tahap = 3;
+  show('track');
+}
+
+function renderTrack(){
+  const nama = ['Verifikasi','Valuasi','Matching','Settlement','Selesai'];
+  let h = `<h2>Status pengalihan</h2><p class="sub">Pantau proses pengalihan posisi Anda dari awal sampai dana diterima.</p>`;
+  if(!tracking.length) h += `<div class="empty">Belum ada pengalihan. Pilih posisi di menu Portofolio, lalu klik "Alihkan posisi".</div>`;
+  tracking.forEach(t=>{
+    h += `<div class="card" style="margin-bottom:14px"><h3>${t.nama}</h3>
+    <div class="row"><span>Harga pengalihan</span><b>${rp(t.harga)}</b></div><div class="steps">`;
+    nama.forEach((n,i)=>{
+      h += `<div class="step ${i<t.tahap||t.tahap===4?'done':i===t.tahap?'now':''}">${n}</div>`;
+    });
+    h += `</div>`;
+    if(t.tahap===3) h += `<button class="btn alt" onclick="selesai(${t.posId})">Simulasi: konfirmasi settlement</button>`;
+    if(t.tahap===2) h += `<p class="sub">Menunggu investor baru. Buka Pasar Pengalihan untuk simulasi.</p>`;
+    if(t.tahap===4) h += `<p style="color:var(--green);font-weight:700;margin-top:8px">Pengalihan selesai. Dana ${rp(t.harga)} diteruskan ke rekening Anda.</p>`;
+    h += `</div>`;
+  });
+  track.innerHTML = h;
+}
+
+function selesai(posId){
+  tracking.find(x=>x.posId===posId).tahap = 4;
+  positions = positions.filter(p=>p.id!==posId);
+  listings = listings.filter(l=>l.posId!==posId);
+  renderTrack();
+}
+
+function render(){renderDash();renderMarket();renderTrack();}
+render();
+</script>
+</body>
+</html>
