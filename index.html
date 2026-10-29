@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+  <script>
+if (!localStorage.getItem('exit_session')) location.replace('login.html');
+document.addEventListener('DOMContentLoaded', () => {
+  let user = {};
+  try { user = JSON.parse(localStorage.getItem('exit_session')) || {}; } catch (e) {}
+  const b = document.createElement('button');
+  b.textContent = 'Keluar' + (user.nama ? ' (' + user.nama + ')' : '');
+  b.onclick = () => { localStorage.removeItem('exit_session'); location.replace('login.html'); };
+  document.querySelector('nav').appendChild(b);
+});
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>EXIT - Your Investment, Your Exit</title>
