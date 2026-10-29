@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Masuk - EXIT</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F4F6F5;--ink:#17262B;--mut:#5E6F73;--line:#D9E1DF;--teal:#0E5A5A;--teal2:#DCEBEA;--amber:#E39A2D;--red:#B3412F}
+*{box-sizing:border-box;margin:0}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.box{background:#fff;border:1px solid var(--line);border-radius:12px;width:100%;max-width:400px;overflow:hidden}
+.top{background:var(--teal);color:#fff;padding:20px 24px}
+.top b{font-size:26px;letter-spacing:1px;display:block}
+.top span{font-size:13px;opacity:.85}
+form{padding:20px 24px 12px}
+h1{font-size:18px}
+label{display:block;font-size:13px;color:var(--mut);margin:12px 0 4px}
+input{width:100%;font:inherit;padding:10px;border:1px solid var(--line);border-radius:6px}
+input:focus-visible,button:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+.go{width:100%;margin-top:18px;background:var(--teal);color:#fff;border:0;border-radius:6px;padding:11px;font:inherit;font-weight:700;cursor:pointer}
+#pesan{padding:0 24px;min-height:24px;font-size:14px;color:var(--red)}
+.demo{margin:8px 24px 24px;padding:10px 12px;background:var(--teal2);border-radius:6px;font-size:13px}
+</style>
+</head>
+<body>
+<div class="box">
+  <div class="top"><b>EXIT</b><span>Your Investment, Your Exit</span></div>
+  <form id="f">
+    <h1>Masuk ke akun Anda</h1>
+    <label for="email">Email</label>
+    <input id="email" type="email" required autocomplete="username">
+    <label for="pass">Kata sandi</label>
+    <input id="pass" type="password" required autocomplete="current-password">
+    <button class="go" type="submit">Masuk</button>
+  </form>
+  <p id="pesan" role="alert"></p>
+  <div class="demo">Akun demo:<br>Email: <b>investor@exit.id</b><br>Kata sandi: <b>exit123</b></div>
+</div>
+
+<script>
+// Daftar akun demo. Tambah akun baru dengan menambah baris di bawah.
+const AKUN = [
+  {nama:'Investor Demo', email:'investor@exit.id', pass:'exit123'}
+];
+
+if (localStorage.getItem('exit_session')) location.replace('index.html');
+
+document.getElementById('f').onsubmit = e => {
+  e.preventDefault();
+  const email = document.getElementById('email').value.trim().toLowerCase();
+  const pass = document.getElementById('pass').value;
+  const u = AKUN.find(a => a.email === email && a.pass === pass);
+  if (!u) {
+    document.getElementById('pesan').textContent = 'Email atau kata sandi salah.';
+    return;
+  }
+  localStorage.setItem('exit_session', JSON.stringify({nama:u.nama, email:u.email}));
+  location.replace('index.html');
+};
+</script>
+</body>
+</html>
