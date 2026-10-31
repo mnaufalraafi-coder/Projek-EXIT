@@ -1,0 +1,49 @@
+## Entri 1: Kerangka prototipe (index.html dan login.html)
+- Tanggal: [isi]
+- Sprint: 1-2
+- User story: kerangka awal (belum ada ID story)
+- Tool: Claude
+- Prompt:
+  > saya ada tugas pake github untuk buat protoype dari yg makalah saya buat kemaren kebetulan saya dapet di bagian vibe coder tolong bantu saya yak
+- Hasil:
+  - `index.html`: prototipe dengan tiga menu (Portofolio, Pasar Pengalihan, Status Pengalihan), valuasi sederhana berdasarkan risiko dan sisa tenor, filter profil risiko, dan simulasi lima tahap pengalihan (Verifikasi, Valuasi, Matching, Settlement, Selesai).
+  - `login.html`: halaman login dengan akun demo.
+  - Alur mengikuti konsep EXIT pada makalah.
+- Catatan:
+  - Prompt awal singkat dan umum; detail fitur diturunkan AI dari konsep makalah dan percakapan lanjutan.
+  - Pesan lanjutan di antara prompt ini dan Entri 2 tidak tersimpan utuh di salinan chat.
+  - Semua data adalah data contoh di dalam kode.
+- Perbaikan: [isi jika ada revisi tampilan atau fitur]
+- Commit: Initial commit, Add login page, Update index.html ([hash])
+
+## Entri 2: Penyederhanaan login (hapus registrasi)
+- Tanggal: [isi]
+- Sprint: 1-2
+- User story: kerangka awal
+- Tool: Claude
+- Prompt:
+  > [pesan kamu yang meminta registrasi dihapus; tidak ada di salinan chat, isi jika ingat]
+  > langkah 2 di bagian mana
+- Hasil: Registrasi dihapus. Login memakai akun demo di dalam kode, sesi di localStorage, dan `index.html` mendapat penjaga halaman serta tombol Keluar.
+- Catatan:
+  - Alasan: sistem dibuat lebih sederhana karena ini prototipe.
+  - Instruksi langkah 2 awalnya kurang jelas lokasinya, jadi saya bertanya ulang.
+  - Pelajaran: sebutkan posisi kode dan hasil yang diharapkan di prompt.
+- Perbaikan: tidak ada setelahnya.
+- Commit: Sederhanakan login dan logout ([hash])
+
+---
+
+## Template entri baru
+
+## Entri [nomor]: [nama fitur]
+- Tanggal:
+- Sprint:
+- User story: US-[xx]
+- Tool:
+- Prompt:
+  > 
+- Hasil:
+- Catatan:
+- Perbaikan:
+- Commit:
