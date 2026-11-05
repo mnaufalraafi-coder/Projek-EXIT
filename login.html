@@ -125,7 +125,13 @@ const AKUN = [
   {nama:'Investor Demo', email:'investor@exit.id', pass:'exit123'}
 ];
 
-if (localStorage.getItem('exit_session')) location.replace(DASHBOARD_URL);
+const params = new URLSearchParams(location.search);
+if (params.has('logout')) {
+  localStorage.removeItem('exit_session');
+  history.replaceState(null, '', location.pathname);
+} else if (localStorage.getItem('exit_session')) {
+  location.replace(DASHBOARD_URL);
+}
 
 const passEl = document.getElementById('pass');
 const eye = document.getElementById('eye');
