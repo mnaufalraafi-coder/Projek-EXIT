@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <script>
+<script>
 if (!localStorage.getItem('exit_session')) location.replace('login.html');
 document.addEventListener('DOMContentLoaded', () => {
   let user = {};
   try { user = JSON.parse(localStorage.getItem('exit_session')) || {}; } catch (e) {}
   const b = document.createElement('button');
+  b.className = 'out';
   b.textContent = 'Keluar' + (user.nama ? ' (' + user.nama + ')' : '');
   b.onclick = () => { localStorage.removeItem('exit_session'); location.replace('login.html'); };
   document.querySelector('nav').appendChild(b);
@@ -15,67 +16,120 @@ document.addEventListener('DOMContentLoaded', () => {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>EXIT - Your Investment, Your Exit</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#F4F6F5;--card:#fff;--ink:#17262B;--mut:#5E6F73;--line:#D9E1DF;--teal:#0E5A5A;--teal2:#DCEBEA;--amber:#E39A2D;--red:#B3412F;--green:#2E7D4F}
+/* ===== PALET WARNA (sama dengan login.html) ===== */
+:root{
+  --bg:#F4EFE8;        /* krem, latar halaman */
+  --bar:#FAF7F2;      /* krem terang, header */
+  --card:#FFFDF9;     /* kartu putih hangat */
+  --ink:#0A1B2E;      /* navy tua, teks utama */
+  --mut:#5F6B7A;      /* teks pendukung */
+  --line:#E6DFD3;     /* garis tepi */
+  --navy:#071A2D;     /* kartu hero gelap */
+  --gold:#B5762E;     /* emas tua */
+  --gold2:#CFA05A;    /* emas muda */
+  --note-bg:#F5E2C2;  /* banner prototipe */
+  --note-ink:#6B3F0F; /* teks banner */
+  --tag-bg:#F3E6CF;   /* label jenis */
+  --red:#B3412F;
+  --green:#2E7D4F;
+}
 *{box-sizing:border-box;margin:0}
 body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
-header{background:var(--teal);color:#fff;padding:18px 24px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
-.logo{font-weight:800;font-size:26px;letter-spacing:1px}
-.logo small{display:block;font-size:12px;font-weight:400;letter-spacing:0;opacity:.8}
-nav{display:flex;gap:6px;flex-wrap:wrap}
-nav button{background:transparent;border:1px solid rgba(255,255,255,.35);color:#fff;padding:8px 14px;border-radius:6px;font:inherit;cursor:pointer}
-nav button.on{background:#fff;color:var(--teal);font-weight:700}
-nav button:focus-visible,.btn:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
-main{max-width:980px;margin:0 auto;padding:24px 16px 60px}
-h2{font-size:22px;margin-bottom:4px}
+svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+header{background:var(--bar);border-bottom:1px solid var(--line);padding:14px 32px;display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between}
+.logo{font-family:'Cormorant SC',Georgia,serif;font-weight:700;font-size:32px;line-height:1;letter-spacing:1px;color:var(--navy)}
+.logo small{display:block;font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-size:13px;font-weight:400;letter-spacing:0;color:var(--mut);margin-top:4px}
+nav{display:flex;gap:8px;flex-wrap:wrap}
+nav button{background:transparent;border:1px solid var(--line);color:var(--ink);padding:9px 18px;border-radius:999px;font:inherit;font-weight:500;cursor:pointer}
+nav button:hover{border-color:var(--gold)}
+nav button.on{background:var(--navy);border-color:var(--navy);color:#fff;font-weight:700}
+nav button.out{background:linear-gradient(90deg,var(--gold2),var(--gold));border:0;color:var(--navy);font-weight:700}
+nav button:focus-visible,.btn:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--gold2);outline-offset:2px}
+
+.note{background:var(--note-bg);color:var(--note-ink);border-bottom:1px solid #E8CFA5;padding:14px 32px;display:flex;gap:12px;align-items:flex-start;font-size:14px;line-height:1.6}
+.note svg{margin-top:2px}
+
+main{max-width:1100px;margin:0 auto;padding:32px 16px 60px}
+h2{font-size:22px;font-weight:800;margin-bottom:4px}
 .sub{color:var(--mut);margin-bottom:18px}
+
+.hero{background:var(--navy);color:#F3EEE6;border-radius:28px;padding:44px 48px;margin-bottom:32px}
+.hero h1{font-family:'Cormorant SC',Georgia,serif;font-weight:700;font-size:42px;line-height:1.1;background:linear-gradient(90deg,var(--gold2),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin-top:14px;max-width:760px;font-size:17px;line-height:1.7;color:#C9CFD8}
+.hero .acts{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+.hero .btn{margin-top:0;display:flex;align-items:center;gap:10px;padding:13px 24px}
+.hero .btn.ghost{color:#fff;border-color:rgba(255,255,255,.35)}
+
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px}
 .card h3{font-size:16px;margin-bottom:6px}
 .row{display:flex;justify-content:space-between;gap:8px;font-size:14px;padding:3px 0}
 .row span:first-child{color:var(--mut)}
-.tag{display:inline-block;font-size:12px;padding:2px 8px;border-radius:20px;background:var(--teal2);color:var(--teal);margin-bottom:8px}
+.tag{display:inline-block;font-size:12px;font-weight:500;padding:3px 10px;border-radius:20px;background:var(--tag-bg);color:var(--note-ink);margin-bottom:8px}
 .risk{font-weight:700}
-.btn{margin-top:12px;background:var(--teal);color:#fff;border:0;border-radius:6px;padding:9px 14px;font:inherit;font-weight:700;cursor:pointer}
-.btn.alt{background:var(--amber);color:#2b1c00}
-.btn.ghost{background:transparent;color:var(--teal);border:1px solid var(--teal)}
-.btn:disabled{opacity:.45;cursor:not-allowed}
-.sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:20px}
-.sum .card b{font-size:22px;display:block}
+
+.btn{margin-top:12px;background:linear-gradient(90deg,var(--gold2),var(--gold));color:var(--navy);border:0;border-radius:999px;padding:10px 20px;font:inherit;font-weight:700;cursor:pointer}
+.btn:hover{filter:brightness(1.06)}
+.btn.alt{background:var(--navy);color:#fff}
+.btn.ghost{background:transparent;color:var(--navy);border:1px solid var(--navy)}
+.btn:disabled{opacity:.45;cursor:not-allowed;filter:none}
+
+.sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:24px}
+.sum .card b{font-size:24px;display:block}
 .sum .card span{color:var(--mut);font-size:13px}
-.panel{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--amber);border-radius:10px;padding:18px;margin-top:16px}
-.empty{padding:28px;text-align:center;color:var(--mut);border:1px dashed var(--line);border-radius:10px}
+.panel{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--gold);border-radius:20px;padding:20px;margin-top:16px}
+.empty{padding:28px;text-align:center;color:var(--mut);border:1px dashed var(--line);border-radius:20px}
+
 .steps{display:flex;gap:0;margin:14px 0;flex-wrap:wrap}
-.step{flex:1;min-width:110px;padding:10px 8px;text-align:center;font-size:13px;background:#E9EEED;color:var(--mut);border-right:2px solid var(--bg)}
-.step.done{background:var(--teal);color:#fff}
-.step.now{background:var(--amber);color:#2b1c00;font-weight:700}
-.note{font-size:12.5px;color:var(--mut);margin-top:24px}
+.step{flex:1;min-width:110px;padding:10px 8px;text-align:center;font-size:13px;background:#EDE7DC;color:var(--mut);border-right:2px solid var(--bg)}
+.step:first-child{border-radius:999px 0 0 999px}
+.step:last-child{border-radius:0 999px 999px 0;border-right:0}
+.step.done{background:var(--navy);color:#fff}
+.step.now{background:linear-gradient(90deg,var(--gold2),var(--gold));color:var(--navy);font-weight:700}
+
 .hide{display:none}
-select,input{font:inherit;padding:8px;border:1px solid var(--line);border-radius:6px;width:100%}
+select,input{font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);width:100%}
 label{font-size:13px;color:var(--mut);display:block;margin:10px 0 4px}
+
+@media (max-width:720px){
+  header,.note{padding-left:20px;padding-right:20px}
+  .hero{padding:30px 24px;border-radius:24px}
+  .hero h1{font-size:32px}
+}
 </style>
 </head>
 <body>
 <header>
-  <div class="logo">EXIT<small>Your Investment, Your Exit</small></div>
+  <div class="logo">EXIT<small id="crumb">Investor App / Portofolio</small></div>
   <nav aria-label="Menu utama">
     <button data-v="dash" class="on">Portofolio</button>
     <button data-v="market">Pasar Pengalihan</button>
     <button data-v="track">Status Pengalihan</button>
   </nav>
 </header>
+
+<div class="note" role="note">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+  <span><b>Mode prototipe:</b> prototipe untuk tugas Inovasi Keuangan Digital. Seluruh data adalah data contoh dan tidak ada transaksi nyata.</span>
+</div>
+
 <main>
   <section id="dash"></section>
   <section id="market" class="hide"></section>
   <section id="track" class="hide"></section>
-  <p class="note">Prototipe untuk tugas Inovasi Keuangan Digital. Seluruh data adalah data contoh dan tidak ada transaksi nyata.</p>
 </main>
 
 <script>
 const rp = n => 'Rp' + Math.round(n).toLocaleString('id-ID');
 const riskLabel = r => ({1:'Rendah',2:'Sedang',3:'Tinggi'})[r];
-const riskColor = r => ({1:'var(--green)',2:'var(--amber)',3:'var(--red)'})[r];
+const riskColor = r => ({1:'var(--green)',2:'var(--gold)',3:'var(--red)'})[r];
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+
+let sesi = {};
+try { sesi = JSON.parse(localStorage.getItem('exit_session')) || {}; } catch (e) {}
 
 // Data contoh posisi investasi milik investor (existing investor)
 let positions = [
@@ -96,12 +150,14 @@ function valuasi(p){
   return {diskon, harga:p.nominal*(1-diskon)};
 }
 
+const JUDUL = {dash:'Portofolio', market:'Pasar Pengalihan', track:'Status Pengalihan'};
 function show(v){
   ['dash','market','track'].forEach(id=>document.getElementById(id).classList.toggle('hide',id!==v));
-  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+  document.querySelectorAll('nav button[data-v]').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+  document.getElementById('crumb').textContent = 'Investor App / ' + JUDUL[v];
   render();
 }
-document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>show(b.dataset.v));
+document.querySelectorAll('nav button[data-v]').forEach(b=>b.onclick=()=>show(b.dataset.v));
 
 function rows(p){return `
   <div class="row"><span>Nominal</span><b>${rp(p.nominal)}</b></div>
@@ -112,7 +168,22 @@ function rows(p){return `
 function renderDash(){
   const total = positions.reduce((a,p)=>a+p.nominal,0);
   const aktif = positions.filter(p=>p.status==='aktif');
-  let h = `<h2>Portofolio saya</h2><p class="sub">Pilih posisi yang ingin dialihkan sebelum jatuh tempo.</p>
+  let h = `
+  <div class="hero">
+    <h1>Selamat datang, ${esc(sesi.nama || 'Investor')}</h1>
+    <p>EXIT mempertemukan investor yang ingin keluar dari posisi investasinya lebih awal dengan investor yang bersedia mengambil alih, secara terstruktur dan transparan.</p>
+    <div class="acts">
+      <button class="btn" onclick="show('market')">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg>
+        Jelajahi Pasar
+      </button>
+      <button class="btn ghost" onclick="show('track')">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+        Status Pengalihan
+      </button>
+    </div>
+  </div>
+  <h2>Portofolio saya</h2><p class="sub">Pilih posisi yang ingin dialihkan sebelum jatuh tempo.</p>
   <div class="sum">
     <div class="card"><b>${rp(total)}</b><span>Total posisi investasi</span></div>
     <div class="card"><b>${aktif.length}</b><span>Posisi aktif</span></div>
@@ -138,7 +209,7 @@ function openValuasi(id){
     <div class="row"><span>Estimasi harga pengalihan</span><b>${rp(v.harga)}</b></div>
     <label for="harga">Harga yang Anda tawarkan</label>
     <input id="harga" type="number" value="${Math.round(v.harga)}" min="1">
-    <button class="btn alt" onclick="listkan(${p.id})">Tawarkan ke investor lain</button>
+    <button class="btn" onclick="listkan(${p.id})">Tawarkan ke investor lain</button>
     <button class="btn ghost" onclick="document.getElementById('valuasiBox').innerHTML=''">Batal</button>
   </div>`;
   document.getElementById('valuasiBox').scrollIntoView({behavior:'smooth'});
